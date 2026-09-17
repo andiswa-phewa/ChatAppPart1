@@ -8,6 +8,7 @@ package za.ac.iie.prog6112.chataapppart1;
  *
  * @author anphewa
  */
+
 /*
  * PROG5121 Programming 1A
  * Part 1 - Registration and Login

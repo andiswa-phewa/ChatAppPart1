@@ -22,6 +22,6 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.release>17</maven.compiler.release>
-        <exec.mainClass>za.ac.iie.prog6112.chataapppart1.ChatAAppPart1</exec.mainClass>
+        <exec.mainClass>za.ac.iie.prog6112.chataapppart1.Main</exec.mainClass>
     </properties>
 </project>
