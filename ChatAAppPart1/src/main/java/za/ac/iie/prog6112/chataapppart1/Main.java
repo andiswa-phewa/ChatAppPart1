@@ -17,64 +17,62 @@ import java.util.Scanner;
 
 public class Main {
 
-    /*
-     * main() is the starting point of a normal Java console application.
-     *
-     * When we run Main.java, Java begins executing the statements
-     * inside this method.
-     */
     public static void main(String[] args) {
 
         /*
-         * Scanner allows us to collect information typed by the user
-         * in the console.
+         * Scanner allows us to read information typed by the user
+         * through the console.
          *
-         * System.in means that the information comes from the keyboard.
+         * System.in represents keyboard input.
          */
         Scanner input = new Scanner(System.in);
 
+
         /*
-         * =========================
-         * REGISTRATION SECTION
-         * =========================
+         * ========================================================
+         * REGISTRATION
+         * ========================================================
          *
-         * Main is responsible for asking questions.
+         * Main.java handles interaction with the user.
          *
-         * Main should NOT contain the actual username/password/phone
-         * validation rules. Those rules belong inside Login.java.
+         * It does NOT contain the actual validation rules.
+         * Those rules belong inside Login.java.
          */
 
         System.out.println("=== PROG5121 PART 1 REGISTRATION ===");
 
-        /*
-         * Ask for the first name.
-         *
-         * nextLine() reads the complete line typed by the user
-         * and stores it as a String.
-         */
+
+        // Ask for the user's first name.
         System.out.print("Enter your first name: ");
         String firstName = input.nextLine();
 
-        // Ask for the user's surname/last name.
+
+        // Ask for the user's surname.
         System.out.print("Enter your last name: ");
         String lastName = input.nextLine();
 
-        // Ask for the registration username.
+
+        // Ask for the username that will be registered.
         System.out.print("Enter a username: ");
         String username = input.nextLine();
 
-        // Ask for the registration password.
+
+        // Ask for the password that will be registered.
         System.out.print("Enter a password: ");
         String password = input.nextLine();
 
-        // Ask for the South African cell number in international format.
-        System.out.print("Enter your South African cell phone number (+27...): ");
+
+        // Ask for the South African cellphone number.
+        System.out.print(
+                "Enter your South African cell phone number (+27...): "
+        );
+
         String cellPhoneNumber = input.nextLine();
 
+
         /*
-         * Create ONE Login object containing the registration information.
-         *
-         * The Login class will be responsible for validating the information.
+         * Create the Login object and send all registration
+         * information to its constructor.
          */
         Login login = new Login(
                 firstName,
@@ -84,62 +82,63 @@ public class Main {
                 cellPhoneNumber
         );
 
+
         /*
-         * Call registerUser().
-         *
-         * The returned String contains the appropriate registration feedback.
+         * registerUser() performs the registration validation
+         * inside the Login class.
          */
         String registrationMessage = login.registerUser();
 
+
+        // Display the result returned by registerUser().
         System.out.println();
         System.out.println(registrationMessage);
 
+
         /*
-         * IMPORTANT:
-         * Do not continue to login if registration failed.
+         * If registration failed, Part 1 does not require us
+         * to keep asking the user again.
          *
-         * isRegistered() returns true only after all registration
-         * validation checks have passed.
+         * Therefore we simply stop here.
          */
         if (!login.isRegistered()) {
 
             System.out.println();
             System.out.println("Registration was not completed.");
 
-            /*
-             * We no longer need Scanner because the program is ending.
-             */
             input.close();
 
-            /*
-             * return ends the main() method immediately.
-             */
+            // return ends the main() method.
             return;
         }
 
+
         /*
-         * =================
-         * LOGIN SECTION
-         * =================
+         * ========================================================
+         * LOGIN
+         * ========================================================
          *
-         * The program reaches this point only after successful registration.
+         * This section is reached ONLY when registration succeeded.
          */
 
         System.out.println();
         System.out.println("=== LOGIN ===");
 
+
         /*
-         * Ask the user to enter the username again.
+         * Ask for the username again.
          *
-         * This is intentionally separate from the stored registration username.
-         * We need two values so that Login can compare them.
+         * This allows the program to compare the login username
+         * with the username that was stored during registration.
          */
         System.out.print("Enter your username to log in: ");
         String loginUsername = input.nextLine();
 
-        // Ask the user to enter the password again.
+
+        // Ask for the password again.
         System.out.print("Enter your password to log in: ");
         String loginPassword = input.nextLine();
+
 
         /*
          * Store the login attempt inside the Login object.
@@ -147,32 +146,34 @@ public class Main {
         login.setEnteredUsername(loginUsername);
         login.setEnteredPassword(loginPassword);
 
-        /*
-         * loginUser() performs the actual comparison.
-         *
-         * We call it before returnLoginStatus() so that the Login object
-         * knows whether the latest attempt succeeded or failed.
-         */
-        boolean loginResult = login.loginUser();
 
         /*
-         * loginResult is useful when explaining the flow:
+         * loginUser() performs the comparison.
          *
-         * true  = login details matched.
-         * false = login details did not match.
-         *
-         * The actual user-friendly message is returned by
-         * returnLoginStatus().
+         * true means the username/password matched.
+         * false means they did not match.
          */
-        System.out.println();
+        login.loginUser();
 
+
+        /*
+         * returnLoginStatus() returns either:
+         *
+         * Welcome <first name>, <last name> ...
+         *
+         * OR
+         *
+         * Username or password incorrect...
+         */
         String loginMessage = login.returnLoginStatus();
 
+
+        // Display the final authentication message.
+        System.out.println();
         System.out.println(loginMessage);
 
-        /*
-         * Scanner should be closed when the application no longer needs it.
-         */
+
+        // Close Scanner once all input is finished.
         input.close();
     }
 }
