@@ -8,90 +8,46 @@ package za.ac.iie.prog6112.chataapppart1;
  *
  * @author anphewa
  */
-
-/*
- * PROG5121 Programming 1A
- * Part 1 - Registration and Login
- *
- * IMPORTANT:
- * If NetBeans created a package statement for your project,
- * keep the SAME package statement in Login.java, Main.java
- * and LoginTest.java.
- *
- * Example:
- * package com.mycompany.chatapppart1;
- */
-
 public class Login {
 
     /*
-     * =========================
-     * PRIVATE FIELDS
-     * =========================
+     * ============================================================
+     * FIELDS
+     * ============================================================
      *
-     * These variables are private because they belong to one Login object.
+     * The fields are private because they belong to this Login object.
+     * This is called encapsulation.
      *
-     * "private" supports encapsulation.
-     * This means code outside this class cannot directly change these
-     * variables without going through the methods that we provide.
-     *
-     * For example:
-     * username should belong to the registered user and should not simply
-     * be changed anywhere in the program without control.
+     * Code outside this class cannot directly change these values.
      */
 
-    // The user's first name is needed for the successful login message.
+    // The user's first and last name are required for the welcome message.
     private String firstName;
-
-    // The user's surname/last name is also needed for the welcome message.
     private String lastName;
 
-    // These are the details stored when the user registers.
+    // These are the details entered during registration.
     private String username;
     private String password;
     private String cellPhoneNumber;
 
-    /*
-     * These two fields store the details that the user enters later
-     * when attempting to log in.
-     *
-     * We keep the registered username/password separate from the
-     * entered login username/password so that we can compare them.
-     */
+    // These are entered later when the user attempts to log in.
     private String enteredUsername;
     private String enteredPassword;
 
-    /*
-     * This variable remembers whether registration was successful.
-     *
-     * boolean means that the variable can contain only:
-     * true  = yes
-     * false = no
-     */
+    // Stores whether registration was successful.
     private boolean registered;
 
-    /*
-     * This variable stores the result of the latest login attempt.
-     *
-     * returnLoginStatus() can then use this value to decide which
-     * message should be returned.
-     */
+    // Stores whether the most recent login attempt was successful.
     private boolean loginSuccessful;
 
+
     /*
-     * =========================
+     * ============================================================
      * CONSTRUCTOR
-     * =========================
+     * ============================================================
      *
-     * A constructor is used when creating an object.
-     *
-     * Example:
-     * Login login = new Login("Kyle", "Smith",
-     *                         "kyl_1", "Ch&&sec@ke99!",
-     *                         "+27838968976");
-     *
-     * The constructor receives the information that was entered
-     * during registration and stores it in this object.
+     * The constructor receives the registration information
+     * when a new Login object is created.
      */
     public Login(String firstName,
                  String lastName,
@@ -99,301 +55,229 @@ public class Login {
                  String password,
                  String cellPhoneNumber) {
 
-        /*
-         * "this.firstName" means the field belonging to THIS Login object.
-         *
-         * "firstName" on the right-hand side is the value received
-         * through the constructor parameter.
-         */
+        // "this" refers to the fields belonging to this object.
         this.firstName = firstName;
         this.lastName = lastName;
         this.username = username;
         this.password = password;
         this.cellPhoneNumber = cellPhoneNumber;
 
-        /*
-         * A new object has not been successfully registered or logged in yet,
-         * so both values begin as false.
-         */
+        // A new user has not yet been registered or logged in.
         this.registered = false;
         this.loginSuccessful = false;
     }
 
+
     /*
-     * =========================
+     * ============================================================
      * checkUserName()
-     * =========================
+     * ============================================================
      *
-     * The brief requires:
-     * 1. The username must contain an underscore (_).
-     * 2. The username must be no more than 5 characters long.
+     * The username must:
+     * 1. Contain an underscore (_)
+     * 2. Be no more than 5 characters long
      *
-     * The method returns a boolean:
-     * true  = username follows the rules.
-     * false = username does not follow the rules.
+     * A boolean method returns either true or false.
      */
     public boolean checkUserName() {
 
         /*
-         * username != null protects the program from a NullPointerException.
+         * username != null prevents a NullPointerException.
          *
-         * contains("_") checks whether an underscore occurs anywhere
-         * in the username.
+         * contains("_") checks for the underscore.
          *
-         * length() <= 5 checks that there are no more than five characters.
+         * length() <= 5 checks the maximum length.
          *
-         * && means AND.
-         * Therefore ALL conditions must be true.
+         * && means AND, so every condition must be true.
          */
         return username != null
                 && username.contains("_")
                 && username.length() <= 5;
     }
 
+
     /*
-     * ===============================
+     * ============================================================
      * checkPasswordComplexity()
-     * ===============================
+     * ============================================================
      *
-     * The password must:
-     * - contain at least 8 characters;
-     * - contain a capital letter;
-     * - contain a number;
-     * - contain a special character.
+     * A valid password must:
+     * - contain at least 8 characters
+     * - contain a capital letter
+     * - contain a number
+     * - contain a special character
      */
     public boolean checkPasswordComplexity() {
 
-        /*
-         * If password is null, there is no password to validate.
-         * We immediately return false.
-         */
+        // A null password cannot be valid.
         if (password == null) {
             return false;
         }
 
-        /*
-         * Start by checking the length requirement.
-         */
+        // Check the minimum length.
         boolean hasMinimumLength = password.length() >= 8;
 
         /*
-         * These start as false because we have not inspected
-         * the password characters yet.
+         * These begin as false because we have not yet found
+         * the required characters.
          */
         boolean hasCapitalLetter = false;
         boolean hasNumber = false;
         boolean hasSpecialCharacter = false;
 
         /*
-         * A for loop allows us to inspect each character in the password.
+         * This loop examines every character in the password.
          *
-         * i starts at 0 because Java String positions begin at index 0.
-         *
-         * i < password.length() means the loop continues while there
-         * are still characters to inspect.
-         *
-         * i++ increases i by 1 after each loop.
+         * i starts at 0 because Java String indexes begin at 0.
          */
         for (int i = 0; i < password.length(); i++) {
 
-            /*
-             * charAt(i) gets one character from the String.
-             */
+            // Get one character from the password.
             char currentCharacter = password.charAt(i);
 
-            /*
-             * Character.isUpperCase(...) checks whether the current
-             * character is a capital letter such as A, B or C.
-             */
+            // Check whether the character is an uppercase letter.
             if (Character.isUpperCase(currentCharacter)) {
                 hasCapitalLetter = true;
             }
 
             /*
-             * Character.isDigit(...) checks specifically for a number
-             * such as 0, 1, 2, ... 9.
+             * isDigit() checks specifically for a number.
              *
-             * Do NOT use isLetterOrDigit() for the number requirement,
-             * because that would incorrectly allow a normal letter
-             * to count as a number.
+             * Do not use isLetterOrDigit() here because that would
+             * allow normal letters to count as numbers.
              */
             if (Character.isDigit(currentCharacter)) {
                 hasNumber = true;
             }
 
             /*
-             * Character.isLetterOrDigit(...) returns true when the
-             * character is either a letter or a number.
+             * isLetterOrDigit() is true for letters and numbers.
              *
              * ! means NOT.
              *
-             * Therefore:
-             * !Character.isLetterOrDigit(...)
-             * means the character is neither a letter nor a number.
+             * Therefore this condition is true when the character
+             * is neither a letter nor a number.
              *
-             * Examples include:
-             * ! @ # $ % & *
+             * Examples: ! @ # $ % & *
              */
             if (!Character.isLetterOrDigit(currentCharacter)) {
                 hasSpecialCharacter = true;
             }
         }
 
-        /*
-         * The password is valid only when ALL four conditions are true.
-         */
+        // ALL four password requirements must be true.
         return hasMinimumLength
                 && hasCapitalLetter
                 && hasNumber
                 && hasSpecialCharacter;
     }
 
+
     /*
-     * ============================
+     * ============================================================
      * checkCellPhoneNumber()
-     * ============================
+     * ============================================================
      *
-     * The assessment requires a REGULAR EXPRESSION (regex)
-     * and requires the researched regex to be attributed.
+     * The PoE specifically requires a researched regular expression.
      *
-     * IMPORTANT FOR STUDENTS:
-     * Replace the placeholders below with the ACTUAL source
-     * that YOU researched.
+     * STUDENT MUST REPLACE THESE PLACEHOLDERS WITH THEIR REAL SOURCE:
      *
-     * Regex pattern adapted from:
-     * Author/Website: __________________________________________
-     * Page/Article: ____________________________________________
-     * URL: _____________________________________________________
+     * Regex adapted from:
+     * Author/Website: ___________________________________________
+     * Page/Article: _____________________________________________
+     * URL: ______________________________________________________
      * Accessed: DD Month YYYY
      *
      * Do not invent a reference.
      */
-
     public boolean checkCellPhoneNumber() {
 
         /*
-         * The Java regex is:
+         * Regex:
          *
          * ^\\+27\\d{9}$
          *
-         * Explanation:
+         * ^       = beginning of the String
+         * \\+     = literal + symbol
+         * 27      = South African international country code
+         * \\d     = a digit from 0 to 9
+         * {9}     = exactly 9 digits
+         * $       = end of the String
          *
-         * ^       = the value must start here.
-         *
-         * \\+     = matches the literal + symbol.
-         *           In Java, backslash itself must be escaped,
-         *           therefore we write \\.
-         *
-         * 27      = the South African international country code.
-         *
-         * \\d     = a digit from 0 to 9.
-         *
-         * {9}     = exactly nine digits must follow +27.
-         *
-         * $       = nothing else may appear after those digits.
-         *
-         * Example accepted value:
+         * Example that passes:
          * +27838968976
          */
         return cellPhoneNumber != null
                 && cellPhoneNumber.matches("^\\+27\\d{9}$");
     }
 
+
     /*
-     * =====================
+     * ============================================================
      * registerUser()
-     * =====================
+     * ============================================================
      *
-     * This method calls the validation methods instead of rewriting
-     * the validation rules.
+     * This method calls the validation methods.
      *
-     * This is important because we want ONE place responsible for
-     * checking each rule.
+     * We do NOT rewrite the validation rules here.
      */
     public String registerUser() {
 
-        /*
-         * Each new registration attempt begins as unsuccessful.
-         */
+        // Start each registration attempt as unsuccessful.
         registered = false;
 
-        /*
-         * The ! means NOT.
-         *
-         * Therefore:
-         * !checkUserName()
-         *
-         * means:
-         * "if the username is NOT valid..."
-         */
+        // First check the username.
         if (!checkUserName()) {
+
             return "Username is not correctly formatted; please ensure that "
                     + "your username contains an underscore and is no more "
                     + "than five characters in length.";
         }
 
-        /*
-         * We only reach this point if the username was valid.
-         *
-         * Now validate the password.
-         */
+        // If username is valid, check the password.
         if (!checkPasswordComplexity()) {
+
             return "Password is not correctly formatted; please ensure that "
                     + "the password contains at least eight characters, "
                     + "a capital letter, a number, and a special character.";
         }
 
-        /*
-         * We only reach this point if both username and password were valid.
-         *
-         * Now validate the cell phone number.
-         *
-         * The wording below follows the Part 1 unit-test table.
-         */
+        // If username and password are valid, check the cellphone number.
         if (!checkCellPhoneNumber()) {
+
             return "Cell number is incorrectly formatted or does not contain "
                     + "an international code; please correct the number and try again.";
         }
 
         /*
-         * If the program reaches this point:
-         * - username is valid;
-         * - password is valid;
-         * - cell number is valid.
-         *
-         * Registration is therefore considered successful.
+         * If Java reaches this point, all three registration
+         * requirements have passed.
          */
         registered = true;
 
         /*
-         * The brief gives individual success messages for the captured
-         * registration information.
+         * These are the success messages supplied by the PoE.
          *
-         * We combine the exact success messages into one String because
-         * registerUser() can return only one String.
-         *
-         * \n creates a new line.
+         * \n starts a new line.
          */
         return "Username successfully captured.\n"
                 + "Password successfully captured.\n"
                 + "Cell number successfully captured.";
     }
 
+
     /*
-     * =================
+     * ============================================================
      * loginUser()
-     * =================
+     * ============================================================
      *
-     * This method checks whether the username and password entered
-     * during login match the username and password stored at registration.
+     * The login username and password must match the details
+     * stored during registration.
      */
     public boolean loginUser() {
 
         /*
-         * If registration never succeeded, login must not succeed.
-         *
-         * This also prevents us from calling .equals() on values
-         * that may not be ready for authentication.
+         * Do not allow login if registration was unsuccessful.
          */
         if (!registered) {
             loginSuccessful = false;
@@ -401,9 +285,7 @@ public class Login {
         }
 
         /*
-         * Null checks make the method safer.
-         *
-         * If either login value is null, the user cannot be authenticated.
+         * These checks prevent NullPointerException.
          */
         if (enteredUsername == null || enteredPassword == null) {
             loginSuccessful = false;
@@ -411,17 +293,18 @@ public class Login {
         }
 
         /*
-         * .equals() compares the CONTENTS of Java Strings.
+         * .equals() compares the CONTENT of Strings.
          *
-         * For example:
+         * We use:
          *
-         * "kyl_1".equals("kyl_1")
+         * username.equals(enteredUsername)
          *
-         * is true because the text is the same.
+         * instead of:
          *
-         * We do NOT use == to compare String contents.
-         * == checks whether two references point to the same object,
-         * which is not what we want when checking login text.
+         * username == enteredUsername
+         *
+         * because == compares object references rather than
+         * the actual text stored inside the Strings.
          */
         loginSuccessful
                 = username.equals(enteredUsername)
@@ -430,42 +313,36 @@ public class Login {
         return loginSuccessful;
     }
 
+
     /*
-     * ==========================
+     * ============================================================
      * returnLoginStatus()
-     * ==========================
+     * ============================================================
      *
-     * This method returns the correct message based on the result
-     * of the latest loginUser() call.
+     * Returns the required message after loginUser() has run.
      */
     public String returnLoginStatus() {
 
-        /*
-         * If loginSuccessful is true, display first name and last name.
-         *
-         * The brief requires the names, NOT the username.
-         */
+        // Successful login.
         if (loginSuccessful) {
+
             return "Welcome " + firstName + ", " + lastName
                     + " it is great to see you again.";
         }
 
-        /*
-         * If loginSuccessful is false, return the exact failed-login message.
-         */
+        // Failed login.
         return "Username or password incorrect, please try again.";
     }
 
+
     /*
-     * ==================================
-     * LOGIN DETAIL SETTERS
-     * ==================================
+     * ============================================================
+     * SETTERS FOR LOGIN DETAILS
+     * ============================================================
      *
-     * A setter is a method that allows us to assign a value
-     * to a private field in a controlled way.
-     *
-     * Main will use these methods when the user enters
-     * their login username and password.
+     * These methods allow Main.java to store the username and
+     * password entered during LOGIN without directly accessing
+     * the private fields.
      */
 
     public void setEnteredUsername(String enteredUsername) {
@@ -476,11 +353,12 @@ public class Login {
         this.enteredPassword = enteredPassword;
     }
 
+
     /*
-     * This helper method lets Main check whether registration succeeded
-     * without comparing message text.
+     * This helper method allows Main to determine whether the
+     * registration succeeded.
      *
-     * This keeps Main independent from the wording of the messages.
+     * It avoids checking the text of a message to make decisions.
      */
     public boolean isRegistered() {
         return registered;
