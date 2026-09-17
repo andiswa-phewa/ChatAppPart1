@@ -39,7 +39,7 @@ public class Main {
          * Those rules belong inside Login.java.
          */
 
-        System.out.println("=== PROG5121 PART 1 REGISTRATION ===");
+        System.out.println("=== WELCOME TO CHATAPP ===");
 
 
         // Ask for the user's first name.

@@ -326,7 +326,7 @@ public class Login {
         // Successful login.
         if (loginSuccessful) {
 
-            return "Welcome " + firstName + ", " + lastName
+            return "Welcome " + firstName + lastName + ", " 
                     + " it is great to see you again.";
         }
 
